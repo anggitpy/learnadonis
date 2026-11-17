@@ -1,0 +1,11 @@
+{{--
+  Reusable DaisyUI Stat Card Component
+  Usage: @statCard({ label: 'Total Tasks', value: 12, desc: 'All time', tone: 'text-primary' })
+--}}
+<div class="stat bg-base-100 rounded-box shadow-sm border border-base-300">
+  <div class="stat-title">{{ label }}</div>
+  <div class="stat-value {{ tone || '' }}">{{ value }}</div>
+  @if (desc)
+    <div class="stat-desc">{{ desc }}</div>
+  @endif
+</div>

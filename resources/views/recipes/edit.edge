@@ -1,0 +1,75 @@
+@layout.dashboard({ title: `Edit: ${recipe.title}`, activeNav: 'recipes' })
+
+  @slot('actions')
+    <a href="/recipes/{{ recipe.id }}" class="btn btn-ghost btn-sm">← Back to Recipe</a>
+  @endslot
+
+  <div class="card bg-base-100 shadow-sm border border-base-300 max-w-2xl">
+    <div class="card-body">
+      {{-- Standard HTML form posts to update() in RecipesController --}}
+      <form method="POST" action="/recipes/{{ recipe.id }}" class="space-y-4">
+        <div class="form-control">
+          <label class="label" for="title">
+            <span class="label-text font-medium">Recipe Title</span>
+          </label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            value="{{ recipe.title }}"
+            required
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="prepTime">
+            <span class="label-text font-medium">Prep Time (minutes)</span>
+          </label>
+          <input
+            id="prepTime"
+            name="prepTime"
+            type="number"
+            min="1"
+            max="1440"
+            value="{{ recipe.prepTime }}"
+            required
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="ingredients">
+            <span class="label-text font-medium">Ingredients</span>
+          </label>
+          <textarea
+            id="ingredients"
+            name="ingredients"
+            rows="4"
+            required
+            class="textarea textarea-bordered w-full"
+          >{{ recipe.ingredients }}</textarea>
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="instructions">
+            <span class="label-text font-medium">Cooking Instructions</span>
+          </label>
+          <textarea
+            id="instructions"
+            name="instructions"
+            rows="5"
+            required
+            class="textarea textarea-bordered w-full"
+          >{{ recipe.instructions }}</textarea>
+        </div>
+
+        <div class="flex items-center gap-3 pt-2">
+          <button type="submit" class="btn btn-primary">Update Recipe</button>
+          <a href="/recipes/{{ recipe.id }}" class="btn btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+@end

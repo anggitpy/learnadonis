@@ -1,0 +1,29 @@
+@layout.dashboard({ title: recipe.title, activeNav: 'recipes' })
+
+  @slot('actions')
+    <a href="/recipes" class="btn btn-ghost btn-sm">← All Recipes</a>
+    <a href="/recipes/{{ recipe.id }}/edit" class="btn btn-outline btn-sm">Edit</a>
+    <form method="POST" action="/recipes/{{ recipe.id }}/delete" class="inline">
+      <button type="submit" class="btn btn-error btn-outline btn-sm">Delete</button>
+    </form>
+  @endslot
+
+  <div class="card bg-base-100 shadow-sm border border-base-300 max-w-3xl">
+    <div class="card-body space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="badge badge-secondary">⏱ Prep time: {{ recipe.prepTime }} minutes</span>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold mb-2">Ingredients</h2>
+        <div class="bg-base-200 p-4 rounded-box whitespace-pre-line text-sm">{{ recipe.ingredients }}</div>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold mb-2">Instructions</h2>
+        <div class="bg-base-200 p-4 rounded-box whitespace-pre-line text-sm">{{ recipe.instructions }}</div>
+      </div>
+    </div>
+  </div>
+
+@end

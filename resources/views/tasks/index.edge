@@ -1,0 +1,77 @@
+{{--
+  This page reuses the exact same layout component as /dashboard!
+  Maps to: resources/views/components/layout/dashboard.edge
+--}}
+@layout.dashboard({ title: 'Task Tracker', activeNav: 'tasks' })
+
+  @slot('actions')
+    <span class="badge badge-neutral">{{ tasks.length }} total</span>
+  @endslot
+
+  {{-- New Task Card --}}
+  <div class="card bg-base-100 shadow-sm border border-base-300">
+    <div class="card-body">
+      <h2 class="card-title text-base">Add a New Task</h2>
+      {{-- The browser submits this form to the POST route; the controller validates and saves it. --}}
+      <form method="POST" action="/tasks" class="flex flex-col sm:flex-row gap-3 mt-2">
+        <input
+          id="title"
+          name="title"
+          type="text"
+          maxlength="255"
+          placeholder="What needs to be done?"
+          required
+          class="input input-bordered flex-1"
+        />
+        <button type="submit" class="btn btn-primary">Add task</button>
+      </form>
+    </div>
+  </div>
+
+  {{-- Task List Card --}}
+  <div class="card bg-base-100 shadow-sm border border-base-300">
+    <div class="card-body">
+      <h2 class="card-title text-base">Tasks</h2>
+
+      @if (tasks.length === 0)
+        <div class="alert">
+          <span>No tasks yet. Add one above!</span>
+        </div>
+      @else
+        <ul class="divide-y divide-base-200">
+          {{-- The controller passed its Lucid query result as "tasks" for Edge to render. --}}
+          @each(task in tasks)
+            <li class="py-3 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                @if (task.isCompleted)
+                  <span class="badge badge-success badge-sm">Done</span>
+                  <del class="text-base-content/50">{{ task.title }}</del>
+                @else
+                  <span class="badge badge-warning badge-sm">Todo</span>
+                  <span class="font-medium">{{ task.title }}</span>
+                @endif
+              </div>
+
+              {{-- Each action sends a simple POST with the task id in its URL. --}}
+              <div class="flex items-center gap-2">
+                <form method="POST" action="/tasks/{{ task.id }}/toggle">
+                  <button type="submit" class="btn btn-xs btn-outline">
+                    @if (task.isCompleted)
+                      Mark incomplete
+                    @else
+                      Mark complete
+                    @endif
+                  </button>
+                </form>
+                <form method="POST" action="/tasks/{{ task.id }}/delete">
+                  <button type="submit" class="btn btn-xs btn-error btn-outline">Delete</button>
+                </form>
+              </div>
+            </li>
+          @endeach
+        </ul>
+      @endif
+    </div>
+  </div>
+
+@end

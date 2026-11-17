@@ -1,0 +1,112 @@
+{{--
+  1. Wrap the page with @layout.dashboard(...)
+     This maps to: resources/views/components/layout/dashboard.edge
+--}}
+@layout.dashboard({ title: 'Dashboard Overview', activeNav: 'dashboard' })
+
+  {{-- 2. Named slot: injects buttons into the top navbar of the layout --}}
+  @slot('actions')
+    <a href="/tasks" class="btn btn-primary btn-sm">+ Manage Tasks</a>
+  @endslot
+
+  {{-- 3. Everything outside named @slot blocks goes into $slots.main() --}}
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    @!statCard({
+      label: 'Total Tasks',
+      value: stats.total,
+      desc: 'Stored in SQLite via Lucid',
+      tone: 'text-primary'
+    })
+    @!statCard({
+      label: 'Completed',
+      value: stats.completed,
+      desc: `${stats.completionRate}% completion rate`,
+      tone: 'text-success'
+    })
+    @!statCard({
+      label: 'Pending',
+      value: stats.pending,
+      desc: 'Tasks waiting for action',
+      tone: 'text-warning'
+    })
+  </section>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    {{-- Recent Tasks Table Card --}}
+    <div class="card bg-base-100 shadow-sm border border-base-300 lg:col-span-2">
+      <div class="card-body">
+        <div class="flex items-center justify-between">
+          <h2 class="card-title">Recent Tasks</h2>
+          <a href="/tasks" class="link link-primary text-sm">View all →</a>
+        </div>
+
+        @if (recentTasks.length === 0)
+          <div class="alert">
+            <span>No tasks yet. Head over to <a href="/tasks" class="link font-semibold">Task Tracker</a> to add one!</span>
+          </div>
+        @else
+          <div class="overflow-x-auto">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Task</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @each(task in recentTasks)
+                  <tr>
+                    <td class="text-base-content/60">#{{ task.id }}</td>
+                    <td class="{{ task.isCompleted ? 'line-through text-base-content/50' : 'font-medium' }}">
+                      {{ task.title }}
+                    </td>
+                    <td>
+                      @if (task.isCompleted)
+                        <span class="badge badge-success badge-sm">Completed</span>
+                      @else
+                        <span class="badge badge-warning badge-sm">Pending</span>
+                      @endif
+                    </td>
+                  </tr>
+                @endeach
+              </tbody>
+            </table>
+          </div>
+        @endif
+      </div>
+    </div>
+
+    {{-- Quick Cheat-Sheet Card explaining Edge Layouts --}}
+    <div class="card bg-base-100 shadow-sm border border-base-300">
+      <div class="card-body space-y-3">
+        <h2 class="card-title">How Edge Layouts Work</h2>
+        <p class="text-sm text-base-content/80">
+          In <strong>Edge v6</strong> (used by AdonisJS v6/v7), layouts are regular components stored in
+          <code>resources/views/components/layout/</code>.
+        </p>
+        <ul class="steps steps-vertical text-sm">
+          <li class="step step-primary">
+            <div class="text-left">
+              <strong>Create layout</strong>
+              <div class="text-xs text-base-content/60"><code>components/layout/dashboard.edge</code></div>
+            </div>
+          </li>
+          <li class="step step-primary">
+            <div class="text-left">
+              <strong>Render slots</strong>
+              <div class="text-xs text-base-content/60">Use <code>&#123;&#123;&#123; await $slots.main() &#125;&#125;&#125;</code></div>
+            </div>
+          </li>
+          <li class="step step-primary">
+            <div class="text-left">
+              <strong>Use in pages</strong>
+              <div class="text-xs text-base-content/60">Call <code>@layout.dashboard({ ... })</code></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+@end

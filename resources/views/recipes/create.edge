@@ -1,0 +1,77 @@
+@layout.dashboard({ title: 'New Recipe', activeNav: 'recipes' })
+
+  @slot('actions')
+    <a href="/recipes" class="btn btn-ghost btn-sm">← Back to Recipes</a>
+  @endslot
+
+  <div class="card bg-base-100 shadow-sm border border-base-300 max-w-2xl">
+    <div class="card-body">
+      {{-- Standard HTML form posts to store() in RecipesController --}}
+      <form method="POST" action="/recipes" class="space-y-4">
+        <div class="form-control">
+          <label class="label" for="title">
+            <span class="label-text font-medium">Recipe Title</span>
+          </label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            placeholder="e.g. Classic Nasi Goreng"
+            required
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="prepTime">
+            <span class="label-text font-medium">Prep Time (minutes)</span>
+          </label>
+          <input
+            id="prepTime"
+            name="prepTime"
+            type="number"
+            min="1"
+            max="1440"
+            value="20"
+            required
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="ingredients">
+            <span class="label-text font-medium">Ingredients</span>
+          </label>
+          <textarea
+            id="ingredients"
+            name="ingredients"
+            rows="4"
+            placeholder="- 2 cups cooked rice&#10;- 2 cloves garlic, minced&#10;- 2 tbsp sweet soy sauce (kecap manis)&#10;- 1 egg"
+            required
+            class="textarea textarea-bordered w-full"
+          ></textarea>
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="instructions">
+            <span class="label-text font-medium">Cooking Instructions</span>
+          </label>
+          <textarea
+            id="instructions"
+            name="instructions"
+            rows="5"
+            placeholder="1. Heat oil in a wok and sauté garlic.&#10;2. Add rice and sweet soy sauce, stir-fry on high heat.&#10;3. Serve with a fried egg on top."
+            required
+            class="textarea textarea-bordered w-full"
+          ></textarea>
+        </div>
+
+        <div class="flex items-center gap-3 pt-2">
+          <button type="submit" class="btn btn-primary">Save Recipe</button>
+          <a href="/recipes" class="btn btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+@end
